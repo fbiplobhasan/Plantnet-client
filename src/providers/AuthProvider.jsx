@@ -60,13 +60,12 @@ const AuthProvider = ({ children }) => {
         await axios.post(
           `${import.meta.env.VITE_API_URL}/users/${currentUser?.email}`,
           {
-            name: currentUser?.displayName,
-            image: currentUser?.photoURL,
+            name: currentUser?.displayName || "Anonymous User",
+            image: currentUser?.photoURL || "https://i.ibb.co/MBtjqXQ/default-avatar.png",
             email: currentUser?.email,
           }
         );
-        console.log("Saved User:", data);
-
+        console.log(currentUser);
         // Get JWT token
         await axios.post(
           `${import.meta.env.VITE_API_URL}/jwt`,

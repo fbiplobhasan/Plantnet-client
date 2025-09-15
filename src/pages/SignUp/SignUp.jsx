@@ -30,7 +30,7 @@ const photoURL = await imageUpload(image)
       //3. Save username & profile photo
       await updateUserProfile(
         name,photoURL);
-      console.log(result);
+      console.log(name,photoURL,result);
 
       navigate("/");
       toast.success("Signup Successful");
