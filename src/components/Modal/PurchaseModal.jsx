@@ -11,9 +11,11 @@ import Button from "../Shared/Button/Button";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { axiosSecure } from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
-const PurchaseModal = ({ closeModal, isOpen, plant }) => {
+const PurchaseModal = ({ closeModal, isOpen, plant, refetch }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     category,
     imageUrl,
@@ -40,7 +42,6 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
     address: "",
     status: "Pending",
   });
-  // Total Price Calculation
 
   const handleQuantity = (value) => {
     if (value > quantity) {
@@ -62,7 +63,14 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
     // post reques to db
     try {
       await axiosSecure.post("/order", purchaseInfo);
+      // decrease quantity
+      await axiosSecure.patch(`/plants/quantity/${_id}`, {
+        quantityToUpdate: totalQuantity,
+        status: "decrease",
+      });
       toast.success("Order Successful!");
+      navigate("/dashboard/my-orders");
+      refetch();
     } catch (error) {
       console.log(error);
     } finally {

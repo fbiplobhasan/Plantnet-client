@@ -13,7 +13,7 @@ const PlantDetails = () => {
   let [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
   const {
-    data: plant = [],
+    data: plant = {},
     isLoading,
     refetch,
   } = useQuery({
@@ -32,8 +32,17 @@ const PlantDetails = () => {
   };
 
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
-  const { category, imageUrl, image, price, quantity, description, _id,name,seller } =
-    plant || {};
+  const {
+    category,
+    imageUrl,
+    image,
+    price,
+    quantity,
+    description,
+    _id,
+    name,
+    seller,
+  } = plant || {};
   return (
     <Container>
       <Helmet>
@@ -54,16 +63,13 @@ const PlantDetails = () => {
         </div>
         <div className="md:gap-10 flex-1">
           {/* Plant Info */}
-          <Heading
-            title={name}
-            subtitle={`Category: ${category}`}
-          />
+          <Heading title={name} subtitle={`Category: ${category}`} />
           <hr className="my-6" />
           <div
             className="
           text-lg font-light text-neutral-500"
           >
-           Description: {description}
+            Description: {description}
           </div>
           <hr className="my-6" />
 
@@ -85,7 +91,7 @@ const PlantDetails = () => {
               width="30"
               alt="Avatar"
               referrerPolicy="no-referrer"
-              src={seller?.image ? seller?.image : 'Not A/V'}
+              src={seller?.image ? seller?.image : "Not A/V"}
             />
           </div>
           <hr className="my-6" />
@@ -104,12 +110,20 @@ const PlantDetails = () => {
           <div className="flex justify-between">
             <p className="font-bold text-3xl text-gray-500">Price: {price}$</p>
             <div>
-              <Button onClick={() => setIsOpen(true)} label={quantity >0 ? 'Purchase':'Out of Stock'} />
+              <Button
+                onClick={() => setIsOpen(true)}
+                label={quantity > 0 ? "Purchase" : "Out of Stock"}
+              />
             </div>
           </div>
           <hr className="my-6" />
 
-          <PurchaseModal plant={plant} closeModal={closeModal} isOpen={isOpen} />
+          <PurchaseModal
+            refetch={refetch}
+            plant={plant}
+            closeModal={closeModal}
+            isOpen={isOpen}
+          />
         </div>
       </div>
     </Container>
