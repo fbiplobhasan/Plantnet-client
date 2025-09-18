@@ -5,9 +5,11 @@ import useAuth from "../../../hooks/useAuth";
 import { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AddPlant = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [uploadImage, setUploadImage] = useState({
     image: {
       name: "Upload Button",
@@ -28,12 +30,7 @@ const AddPlant = () => {
     const image = form.image.files[0];
     const imageUrl = await imageUpload(image);
 
-    const seller = {
-      name: user?.displayName,
-      image: user?.photoURL,
-      email: user?.email,
-    };
-    const plantData = {
+      const plantData = {
       name,
       description,
       category,
@@ -41,13 +38,18 @@ const AddPlant = () => {
       quantity,
       image,
       imageUrl,
+      seller: {
+      name: user?.displayName,
+      image: user?.photoURL,
+      email: user?.email,
+    }
     };
     console.table({ plantData });
     try {
       const { data } = await axiosSecure.post("/plants", plantData);
       toast.success("Data Added Successfully!");
+      navigate('/dashboard/my-inventory');
     } catch {
-    } finally {
     }
   };
   return (

@@ -1,32 +1,17 @@
 /* eslint-disable react/prop-types */
-import {
-  Dialog,
-  Transition,
-  TransitionChild,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
+import { Dialog, Transition, TransitionChild, DialogPanel, DialogTitle,} from "@headlessui/react";
 import { Fragment, useState } from "react";
 import Button from "../Shared/Button/Button";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
-import { axiosSecure } from "../../hooks/useAxiosSecure";
 import { useNavigate } from "react-router-dom";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const PurchaseModal = ({ closeModal, isOpen, plant, refetch }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const {
-    category,
-    imageUrl,
-    image,
-    price,
-    quantity,
-    description,
-    _id,
-    name,
-    seller,
-  } = plant || {};
+  const axiosSecure = useAxiosSecure();
+  const { category, imageUrl, image, price, quantity, name, seller, description, _id } = plant || {};
   const [totalQuantity, setTotalQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(price);
   const [purchaseInfo, setPurchaseInfo] = useState({
